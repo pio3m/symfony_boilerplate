@@ -19,6 +19,9 @@ class Task
     #[ORM\Column(length: 32)]
     private ?string $status = null;
 
+    #[ORM\Column(length: 32)]
+    private string $temp = "temp";
+
     public function getId(): ?int
     {
         return $this->id;
