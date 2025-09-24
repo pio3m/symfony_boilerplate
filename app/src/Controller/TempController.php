@@ -11,6 +11,9 @@ final class TempController extends AbstractController
     #[Route('/temp', name: 'app_temp')]
     public function index(): Response
     {
+        $temp = 'piotr';
+        dump($temp);
+
         return $this->render('temp/index.html.twig', [
             'abc' => 'TempController works!',
         ]);
