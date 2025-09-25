@@ -17,7 +17,7 @@ services:
         resource: '../src/'
 
     App\Service\EmailNotifier:
-        tags: ['app.notifier']
+        tags: ['app.notifier', 'abxc']
 
     App\Service\SmsNotifier:
         tags: ['app.notifier']
