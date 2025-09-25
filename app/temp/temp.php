@@ -1,24 +1,64 @@
 <?php
 
-class TaskService {
-    private $repo;
+namespace App\Temp;
 
-    public function __construct() {
-        $this->repo = new TaskRepository(); // klasa sama tworzy zależność
+
+class TaskRepository {
+
+}   
+
+
+class TaskService {
+
+    private TaskRepository $repo;
+
+    public function __construct(TaskRepository $repo) {
+        $this->repo = $repo;
+    }
+
+    public function createTask(string $name): void {
+        // logic to create a task
+        // e.g., $this->repo->save($task);
     }
 }
 
-class TaskService {
-    public function __construct(private TaskRepository $repo) {}
+
+interface Logger {
+    public function log(string $message);
 }
 
-namespace App\Service;
+class FileLogger implements Logger {
 
-class Notifier
-{
-    public function __construct(
-        private string $apiKey,
-        private \Psr\Log\LoggerInterface $logger
-    ) {}
+    public function __construct(private string $filePath) {}
+
+    public function log(string $message) {
+        echo "[File] " . $message;
+    }
 }
 
+class DatabaseLogger implements Logger {
+    public function log(string $message) {
+        echo "[DB] " . $message;
+    }
+}
+
+class UserService {
+    private Logger $logger;
+
+    // ✅ wstrzyknięcie zależności przez konstruktor
+    public function __construct(Logger $logger) {
+        $this->logger = $logger;
+    }
+
+    public function register(string $name) {
+        $this->logger->log("Zarejestrowano użytkownika: $name");
+    }
+
+    //logowanie uzytkownika
+}
+
+$service1 = new UserService(new FileLogger("app.log"));
+$service1->register("Anna");
+
+$service2 = new UserService(new DatabaseLogger());
+$service2->register("Piotr");
