@@ -19,6 +19,52 @@ final class TaskController extends AbstractController
         ]);
     }
 
+    // Implementacja wzorca strategia dla serwisu greetings
+
+    #[Route('/greetings', methods: ['GET'])]
+    public function greetings(Request $req): JsonResponse
+    {
+        $name = $req->query->get('name', 'Guest');
+        $strategyKey = $req->query->get('strategy', 'formal');
+
+        // Strategie
+        interface GreetingsStrategy {
+            public function greet(string $name): string;
+        }
+
+        class FormalGreetingsStrategy implements GreetingsStrategy {
+            public function greet(string $name): string {
+                return "Good day, " . $name . ".";
+            }
+        }
+
+        class CasualGreetingsStrategy implements GreetingsStrategy {
+            public function greet(string $name): string {
+                return "Hi " . $name . "!";
+            }
+        }
+
+        class GreetingsResolver {
+            public static function byKey(string $key): GreetingsStrategy {
+                return match($key) {
+                    'formal' => new FormalGreetingsStrategy(),
+                    'casual' => new CasualGreetingsStrategy(),
+                    default => throw new \Exception('Unknown strategy'),
+                };
+            }
+        }
+
+        try {
+            $strategy = GreetingsResolver::byKey($strategyKey);
+            $greeting = $strategy->greet($name);
+        } catch (\Exception $e) {
+            return $this->json(['ok' => false, 'error' => $e->getMessage()], 400);
+        }
+
+        return $this->json(['ok' => true, 'greeting' => $greeting, 'strategy' => $strategyKey]);
+    }
+
+
 
     #[Route('/notify', methods: ['GET','POST'])]
     public function notify(Request $req, NotifierResolver $resolver): JsonResponse
@@ -29,7 +75,7 @@ final class TaskController extends AbstractController
         try {
             $resolver->byKey($channel)->notify($message);
         } catch (\Exception $e) {
-            
+
             return $this->json(['ok' => false, 'error' => "nie ma takiego kanału"], 400);
         }
         
