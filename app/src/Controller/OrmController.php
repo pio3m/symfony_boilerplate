@@ -29,7 +29,10 @@ final class OrmController extends AbstractController
         // Encja trafia do Unit of Work (NEW), ale jeszcze brak SQL
         $em->persist($note);
 
-        return new Response('Po persist(): id = ' . var_export($note->getId(), true) . ' (powinno być null)');
+        // return new Response('Po persist(): id = ' . var_export($note->getId(), true) . ' (powinno być null)');
+        return $this->render('orm/index.html.twig', [
+            'message' => 'Po persist(): id = ' . var_export($note->getId(), true) . ' (powinno być null)',
+        ]); 
     }
 
     #[Route('/orm/note/s2-persist-check', name: 'orm_note_s2', methods: ['GET'])]
@@ -57,7 +60,10 @@ final class OrmController extends AbstractController
         $em->flush();                   // SQL: INSERT
         $after  = $note->getId();       // np. 42
 
-        return new Response("ID przed flush: " . var_export($before, true) . ", po flush: " . $after);
+        // return new Response("ID przed flush: " . var_export($before, true) . ", po flush: " . $after);
+        return $this->render('orm/index.html.twig', [
+            'message' => "ID przed flush: " . var_export($before, true) . ", po flush: " . $after,
+        ]); 
     }
 
     #[Route('/orm/note/create/{title}', name: 'orm_note_create', methods: ['GET'])]
