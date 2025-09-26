@@ -11,25 +11,31 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class NoteRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, )
     {
         parent::__construct($registry, Note::class);
     }
 
-    //    /**
-    //     * @return Note[] Returns an array of Note objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('n')
-    //            ->andWhere('n.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('n.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function getFromFireBird(): array
+    {
+        //service firebird api call
+        return [];
+    }
+
+       /**
+        * @return Note[] Returns an array of Note objects
+        */
+       public function findByExampleField($value): array
+       {
+           return $this->createQueryBuilder('n')
+               ->andWhere('n.exampleField = :val')
+               ->setParameter('val', $value)
+               ->orderBy('n.id', 'ASC')
+               ->setMaxResults(10)
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 
     //    public function findOneBySomeField($value): ?Note
     //    {
