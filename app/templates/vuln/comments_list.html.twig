@@ -1,0 +1,23 @@
+<h2>Komentarze (NIEBEZPIECZNE DEMO)</h2>
+
+<form method="post" action="{{ path('vuln_comments_add') }}">
+    <input name="author" placeholder="Autor">
+    <textarea name="content" placeholder="Treść (uwaga: XSS demo)"></textarea>
+    <button>Dodaj</button>
+</form>
+
+<form method="post" action="{{ path('vuln_comments_delete') }}" style="margin-top:1rem">
+    <input name="filter" placeholder="Usuń autora zawierającego...">
+    <button>Usuń</button>
+</form>
+
+<ul>
+    {% for c in comments %}
+        <li>
+            <strong>{{ c.author }}</strong>:
+            {{ c.content|raw }}
+        </li>
+    {% else %}
+        <li>Brak komentarzy</li>
+    {% endfor %}
+</ul>
